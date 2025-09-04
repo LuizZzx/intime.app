@@ -4,11 +4,15 @@ const APP_ID = process.env.AGORA_APP_ID;
 const APP_CERTIFICATE = process.env.AGORA_APP_CERTIFICATE;
 
 export default function handler(req, res) {
-  if (req.method !== "POST") {
+  let channelName, uid;
+
+  if (req.method === "POST") {
+    ({ channelName, uid } = req.body);
+  } else if (req.method === "GET") {
+    ({ channelName, uid } = req.query);
+  } else {
     return res.status(405).json({ error: "Método não permitido" });
   }
-
-  const { channelName, uid } = req.body;
 
   if (!channelName) {
     return res.status(400).json({ error: "Channel name é obrigatório" });
@@ -32,6 +36,7 @@ export default function handler(req, res) {
     token,
     channelName,
     uid: uid || 0,
-    expireAt: privilegeExpireTime
+    expireAt: privilegeExpireTime,
   });
 }
+
