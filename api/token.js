@@ -1,18 +1,17 @@
-import { RtcTokenBuilder, RtcRole } from "agora-access-token";
+import pkg from "agora-access-token";
+const { RtcTokenBuilder, RtcRole } = pkg;
 
 const APP_ID = process.env.AGORA_APP_ID;
 const APP_CERTIFICATE = process.env.AGORA_APP_CERTIFICATE;
 
 export default function handler(req, res) {
-  let channelName, uid;
-
-  if (req.method === "POST") {
-    ({ channelName, uid } = req.body);
-  } else if (req.method === "GET") {
-    ({ channelName, uid } = req.query);
-  } else {
+  // Permite GET e POST para facilitar teste no navegador
+  if (req.method !== "POST" && req.method !== "GET") {
     return res.status(405).json({ error: "Método não permitido" });
   }
+
+  // Se for GET, pegamos query params; se for POST, pegamos body
+  const { channelName, uid } = req.method === "POST" ? req.body : req.query;
 
   if (!channelName) {
     return res.status(400).json({ error: "Channel name é obrigatório" });
@@ -39,4 +38,3 @@ export default function handler(req, res) {
     expireAt: privilegeExpireTime,
   });
 }
-
