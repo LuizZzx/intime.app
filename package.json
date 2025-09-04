@@ -1,0 +1,12 @@
+{
+  "name": "agora-token-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "api/token.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "agora-access-token": "^2.0.4"
+  }
+}
